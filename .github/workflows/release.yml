@@ -20,6 +20,8 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build Release APK
       run: ./gradlew assembleRelease
+    - name: Set current directory as a safe repository
+      run: git config --global --add safe.directory /github/workspace
     - name: Releasing using Hub
       uses: r0user/release-apk@main
       env:
