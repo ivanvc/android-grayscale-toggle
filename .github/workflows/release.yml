@@ -26,4 +26,4 @@ jobs:
     - name: Release using github cli
       run: gh release create ${GITHUB_REF##*/} ./app/build/outputs/apk/release/**.apk
       env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       GITHUB_TOKEN: ${{ secrets.TOKEN }}
