@@ -20,7 +20,7 @@ jobs:
       run: |
         echo "${{ secrets.KEYSTORE_FILE_CONTENTS }}" | base64 -d > keystore.jks && \
         cat <<EOL > local.properties
-        storeFilePath=keystore.jks
+        storeFilePath=$PWD/keystore.jks
         storePassword=${{ secrets.RELEASE_STORE_PASSWORD }}
         keyAlias=${{ secrets.RELEASE_KEY_ALIAS }}
         keyPassword=${{ secrets.RELEASE_KEY_PASSWORD }}
