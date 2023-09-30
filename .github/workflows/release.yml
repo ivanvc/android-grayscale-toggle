@@ -18,13 +18,12 @@ jobs:
         distribution: 'temurin'
     - name: Load keystore
       run: |
-        mkdir gradle-config && \
-        echo "${{ secrets.KEYSTORE_FILE_CONTENTS }}" | base64 -d > gradle-config/keystore && \
-        cat <<EOL > gradle-config/gradle.properties
-        RELEASE_STORE_FILE=$PWD/gradle-config/keystore
-        RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}
-        RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}
-        RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}
+        echo "${{ secrets.KEYSTORE_FILE_CONTENTS }}" | base64 -d > keystore.jks && \
+        cat <<EOL > local.properties
+        storeFilePath=keystore.jks
+        storePassword=${{ secrets.RELEASE_STORE_PASSWORD }}
+        keyAlias=${{ secrets.RELEASE_KEY_ALIAS }}
+        keyPassword=${{ secrets.RELEASE_KEY_PASSWORD }}
         EOL
     - name: Build Release APK
       run: ./gradlew assembleRelease
