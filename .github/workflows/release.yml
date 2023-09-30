@@ -18,6 +18,7 @@ jobs:
         distribution: 'temurin'
     - name: Load keystore
       run: |
+        ls -alsh ~/.gradle && \
         mkdir -p ~/.gradle && \
         echo "${{ secrets.KEYSTORE_FILE_CONTENTS }}" | base64 -d > ~/.gradle/keystore && \
         cat <<EOL > ~/.gradle/gradle.properties
