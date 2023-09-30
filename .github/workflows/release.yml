@@ -18,7 +18,6 @@ jobs:
         distribution: 'temurin'
     - name: Load keystore
       run: |
-        echo $GRADLE_USER_HOME && \
         mkdir -p ~/.gradle && \
         echo "${{ secrets.KEYSTORE_FILE_CONTENTS }}" | base64 -d > ~/.gradle/keystore && \
         cat <<EOL > ~/.gradle/gradle.properties
@@ -28,7 +27,7 @@ jobs:
         RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}
         EOL
     - name: Build Release APK
-      run: ./gradlew assembleRelease
+      run: GRADLE_USER_HOME=~/.gradle ./gradlew assembleRelease
     - name: Set current directory as a safe repository
       run: git config --global --add safe.directory /github/workspace
     - uses: ButterCam/setup-github-cli@master
