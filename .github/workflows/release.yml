@@ -16,8 +16,16 @@ jobs:
       with:
         java-version: 17
         distribution: 'temurin'
-    - name: Make Gradle executable
-      run: chmod +x ./gradlew
+    - name: Load keystore
+      run: |
+        mkdir -p ~/.gradle && \
+        echo "${{ secrets.KEYSTORE_FILE_CONTENTS }}" | base64 -d > ~/.gradle/keystore && \
+        cat <<EOL > ~/.gradle/gradle.properties
+        RELEASE_STORE_FILE=~/.gradle/keystore
+        RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}
+        RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}
+        RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}
+        EOL
     - name: Build Release APK
       run: ./gradlew assembleRelease
     - name: Set current directory as a safe repository
