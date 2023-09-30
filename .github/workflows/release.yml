@@ -18,16 +18,18 @@ jobs:
         distribution: 'temurin'
     - name: Load keystore
       run: |
-        mkdir -p ~/.gradle && \
-        echo "${{ secrets.KEYSTORE_FILE_CONTENTS }}" | base64 -d > ~/.gradle/keystore && \
-        cat <<EOL > ~/.gradle/gradle.properties
-        RELEASE_STORE_FILE=~/.gradle/keystore
+        mkdir gradle-config && \
+        echo "${{ secrets.KEYSTORE_FILE_CONTENTS }}" | base64 -d > gradle-config/keystore && \
+        cat <<EOL > gradle-config/gradle.properties
+        RELEASE_STORE_FILE=$PWD/gradle-config/keystore
         RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}
         RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}
         RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}
         EOL
     - name: Build Release APK
-      run: GRADLE_USER_HOME=~/.gradle ./gradlew assembleRelease
+      run: ./gradlew assembleRelease
+      env:
+        GRADLE_USER_HOME: ./gradle-config
     - name: Set current directory as a safe repository
       run: git config --global --add safe.directory /github/workspace
     - uses: ButterCam/setup-github-cli@master
