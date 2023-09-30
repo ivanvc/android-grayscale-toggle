@@ -22,8 +22,8 @@ jobs:
       run: ./gradlew assembleRelease
     - name: Set current directory as a safe repository
       run: git config --global --add safe.directory /github/workspace
-    - uses: geertvdc/setup-hub@master
-    - name: Release using hub
-      run: hub release create -a ./app/build/outputs/apk/release/**.apk -m "v${GITHUB_REF##*/}" ${GITHUB_REF##*/}
+    - uses: ButterCam/setup-github-cli@master
+    - name: Release using github cli
+      run: gh release create ${GITHUB_REF##*/} ./app/build/outputs/apk/release/**.apk
       env:
-       GITHUB_TOKEN: ${{ secrets.TOKEN }}
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
